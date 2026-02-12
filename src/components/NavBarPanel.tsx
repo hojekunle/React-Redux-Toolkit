@@ -1,7 +1,11 @@
 import {Navbar, Nav, Container} from 'react-bootstrap'
 import {Link} from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const NavBar = () => {
+  //read state from the cartSlice denoted state.cart
+  const cartProducts = useSelector(state => state.cart);
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
@@ -13,7 +17,7 @@ const NavBar = () => {
         <Navbar.Toggle/>
         <Navbar.Collapse className='justify-content-end'>
             <Navbar.Text>
-                <Nav.Link to="/cart" as={Link}>My Cart 0</Nav.Link>
+                <Nav.Link to="/cart" as={Link}>My Cart {cartProducts.length}</Nav.Link>
             </Navbar.Text>
         </Navbar.Collapse>
         
