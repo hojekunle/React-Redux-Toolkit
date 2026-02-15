@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { remove } from '../store/cartSlice';
 
 const Cart = () => {
+  //state.cart gets cart from configureStore which is a ref to cartSlice containing products added via its add reducer method. see NavBarPanel for explanation
   const products = useSelector(state => state.cart);
   const dispatch = useDispatch();
 

@@ -1,17 +1,23 @@
 import React, {useState, useEffect} from 'react';
 import {Card, Button} from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { add } from '../store/cartSlice';
-
+import { getProducts } from '../store/productSlice';
 
 const Products = () => {
   const dispatch = useDispatch();
-  const[products, getProducts] = useState([]);
+  //const[products, getProducts] = useState([]);
+
+  //use alias products for data, call productSlice via store.tsx to get updated data
+  const {data: products} = useSelector(state => state.products);
 
   useEffect(() =>{
-    fetch("https://fakestoreapi.com/products")
-    .then(data => data.json())
-    .then(result => getProducts(result))
+    //dispatch an action for fetchProducts()
+    dispatch(getProducts());
+
+    // fetch("https://fakestoreapi.com/products")
+    // .then(data => data.json())
+    // .then(result => getProducts(result))
 
   }, [])
 

@@ -3,7 +3,12 @@ import {Link} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const NavBar = () => {
-  //read state from the cartSlice denoted state.cart
+  /*
+  read state from the cartSlice denoted state.cart
+  'state' is the whole object from the reducer in configureStore with a refence to cartSlice: { cart: [...] }
+  using .push(), your state for this specific slice is an Array.
+  The state inside our cartSlice reducer refers only to that specific slice's data (e.g., the array of products in the cart pushed from Products.tsx)
+  */
   const cartProducts = useSelector(state => state.cart);
 
   return (

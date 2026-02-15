@@ -11,6 +11,7 @@ const cartSlice = createSlice({
             state.push(action.payload)
         },
         remove(state, action){
+            //filter keep items satisfy the condition in the state and deletes others. For a given dispatch(remove(2)), action.payload is 2
             return state.filter(item => item.id !== action.payload)
         }
     }
