@@ -1,32 +1,41 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import StatusCode from '../utils/StatusCode';
+
+//Thunk middleware allows you to write action creators that return a function that can include async operations unlike plain objects
+export const getProducts = createAsyncThunk('products/get', async() => {
+    const data = await fetch("https://fakestoreapi.com/products");
+        const result = await data.json();
+        return result;
+})
 
 const initialState = {
     data: [],
+    status: StatusCode.IDLE
 };
 
 const productSlice = createSlice({
     name: "products",
     initialState,
+    //for synchronous operation
+    //handle internal data
     reducers: {
-        fetchProducts(state, action){
-            //reducer doesnt support async functions hence we make the call outside
-            state.data = action.payload; //retrieve items from the dispatch method of getProducts function
-        }
+        
+    },
+    //for async operation
+    //handle external data or eavesdrop on other slices and display loader based on promise state
+    extraReducers: (builder) => {
+        builder.addCase(getProducts.pending, (state, action) => {
+            state.status = StatusCode.LOADING;
+        })
+        .addCase(getProducts.fulfilled, (state, action) => {
+            state.data = action.payload;
+            state.status = StatusCode.IDLE;
+        })
+        .addCase(getProducts.rejected, (state, action) => {
+            state.status = StatusCode.ERROR;
+        })
     }
 });
 
-export const {fetchProducts} = productSlice.actions;
-export default productSlice.reducer;
 
-export function getProducts(){
-    //create Thunk creator
-    try{
-        return async function getProductsThunk(dispatch, getState){
-        const data = await fetch("https://fakestoreapi.com/products");
-        const result = await data.json();
-        dispatch(fetchProducts(result));
-    }
-    } catch (error) {
-            console.error("Failed to fetch products:", error);
-    }
-}
+export default productSlice.reducer;
